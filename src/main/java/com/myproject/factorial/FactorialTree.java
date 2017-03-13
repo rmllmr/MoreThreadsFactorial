@@ -8,7 +8,7 @@ import java.math.BigInteger;
 public class FactorialTree implements Runnable{
 
     private int threadsCount = 1;
-    private int taskCount = 0;
+    private static int taskCount = 0;
     private int factorialNum = 10;
     private BigInteger factorialResualt = BigInteger.ONE;
     private final int id = taskCount++;
@@ -32,7 +32,7 @@ public class FactorialTree implements Runnable{
 
     static BigInteger factorialNaive(int n1, int n2){
         BigInteger r = BigInteger.valueOf(n1);
-        for (int i = n1+1; i <= n2; ++i) {
+        for (int i = n1; i <= n2; ++i) {
             r = r.multiply(BigInteger.valueOf(i));
         }
         return r;
@@ -42,6 +42,7 @@ public class FactorialTree implements Runnable{
         int koef = this.factorialNum/this.threadsCount;
         int start = (koef*id)+1;
         int end = koef*(id+1);
+        System.out.println(taskCount);
         factorialResualt = factorialResualt.multiply(factorialNaive(start, end));
         System.out.println("#"+ id+ " (" + start+ ","+ end + ") "+ factorialResualt.toString());
 
