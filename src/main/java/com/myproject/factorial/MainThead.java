@@ -2,6 +2,7 @@ package com.myproject.factorial;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Scanner;
 import java.util.concurrent.*;
 
 /**
@@ -10,31 +11,38 @@ import java.util.concurrent.*;
 public class MainThead {
     public static void main(String[] args){
 
- //       FactorialTree launch = new FactorialTree();
- //       launch.setFactorialNum(20);
- //       launch.setThreadsCount(2);
-        int factorialNum  = 20;
+        int factorialNum  = 10;
         int threadsCount = 4;
-        int koef = factorialNum/threadsCount;
-        int start = 0;
-        int end = 0;
+
+        Scanner in = new Scanner(System.in);
+        System.out.print("Введите значение вычисляемого факториала( по умолчанию 10 ) : ");
+        factorialNum = in.nextInt();
+        System.out.print("Введите количество поток для вычисления ( по умолчанию 2) : ");
+        threadsCount = in.nextInt();
+
+        int stepValueFactorialToThreads = factorialNum/threadsCount;
+        int startValueFactorialToThreads = 0;
+        int endValueFactorialToThreads = 0;
         BigInteger factorial = BigInteger.ONE;
 
 
+        long beginTime = System.currentTimeMillis();
         ExecutorService exec = Executors.newCachedThreadPool();
         ArrayList<Future<BigInteger>> resault = new ArrayList<Future<BigInteger>>();
         for (int i = 0; i < threadsCount; i ++ ){
-            start = (koef*i)+1;
-            end = koef*(i+1);
-            System.out.println("( "+ start+ "- "+ end+ " )");
+            startValueFactorialToThreads = (stepValueFactorialToThreads*i)+1;
+            endValueFactorialToThreads = stepValueFactorialToThreads*(i+1);
+            if (i == (threadsCount-1)&&( endValueFactorialToThreads != factorialNum)){
+                endValueFactorialToThreads = factorialNum;
+            }
+            System.out.println("( "+ startValueFactorialToThreads+ "- "+ endValueFactorialToThreads + " )");
 
-            resault.add(exec.submit(new factCallable(start, end, BigInteger.ONE)));
+            resault.add(exec.submit(new FactorialUtil(startValueFactorialToThreads, endValueFactorialToThreads, BigInteger.ONE)));
         }
 
         for (Future<BigInteger> bigIntegerFuture : resault) {
             try {
                 factorial = factorial.multiply(bigIntegerFuture.get());
-                System.out.println(bigIntegerFuture.get());
             } catch (InterruptedException e) {
                 e.printStackTrace();
             } catch (ExecutionException e) {
@@ -42,8 +50,12 @@ public class MainThead {
             }
         }
 
+        long endTime = System.currentTimeMillis();
+
+        System.out.print("Результут вычисления "+factorialNum+"! = ");
         System.out.println(factorial.toString());
 
+        System.out.println("Время вычисления  "+ (endTime - beginTime));
 
     }
 }
