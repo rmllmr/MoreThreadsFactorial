@@ -11,20 +11,20 @@ public class FactorialUtil implements Callable<BigInteger> {
     private int end;
     private BigInteger result;
 
-    public FactorialUtil(int n1, int n2, BigInteger result){
-        this.start = n1;
-        this.end = n2;
+    public FactorialUtil(int startValueFactorialToThreads, int endValueFactorialToThreads, BigInteger result){
+        this.start = startValueFactorialToThreads;
+        this.end = endValueFactorialToThreads;
         this.result = result;
     }
 
     public BigInteger call() throws Exception {
 
-        BigInteger r = result;
+        BigInteger resultFactorialToThreads = result;
 
         for (int i = start; i <= end; ++i) {
-            r = r.multiply(BigInteger.valueOf(i));
+            resultFactorialToThreads = resultFactorialToThreads.multiply(BigInteger.valueOf(i));
         }
-        return r;
+        return resultFactorialToThreads;
 
     }
 }

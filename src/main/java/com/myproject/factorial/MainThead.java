@@ -15,9 +15,9 @@ public class MainThead {
         int threadsCount = 4;
 
         Scanner in = new Scanner(System.in);
-        System.out.print("Введите значение вычисляемого факториала( по умолчанию 10 ) : ");
+        System.out.print("Enter value of the calculate factorial (default 10) : ");
         factorialNum = in.nextInt();
-        System.out.print("Введите количество поток для вычисления ( по умолчанию 2) : ");
+        System.out.print("Enter number of threads to calculate (default 2) : ");
         threadsCount = in.nextInt();
 
         int stepValueFactorialToThreads = factorialNum/threadsCount;
@@ -28,7 +28,7 @@ public class MainThead {
 
         long beginTime = System.currentTimeMillis();
         ExecutorService exec = Executors.newCachedThreadPool();
-        ArrayList<Future<BigInteger>> resault = new ArrayList<Future<BigInteger>>();
+        ArrayList<Future<BigInteger>> result = new ArrayList<Future<BigInteger>>();
         for (int i = 0; i < threadsCount; i ++ ){
             startValueFactorialToThreads = (stepValueFactorialToThreads*i)+1;
             endValueFactorialToThreads = stepValueFactorialToThreads*(i+1);
@@ -37,10 +37,10 @@ public class MainThead {
             }
             System.out.println("( "+ startValueFactorialToThreads+ "- "+ endValueFactorialToThreads + " )");
 
-            resault.add(exec.submit(new FactorialUtil(startValueFactorialToThreads, endValueFactorialToThreads, BigInteger.ONE)));
+            result.add(exec.submit(new FactorialUtil(startValueFactorialToThreads, endValueFactorialToThreads, BigInteger.ONE)));
         }
 
-        for (Future<BigInteger> bigIntegerFuture : resault) {
+        for (Future<BigInteger> bigIntegerFuture : result) {
             try {
                 factorial = factorial.multiply(bigIntegerFuture.get());
             } catch (InterruptedException e) {
