@@ -8,7 +8,7 @@ import java.util.concurrent.*;
 /**
  * Created by user on 13.03.2017.
  */
-public class MainThead {
+public class FactorialThead {
     public static void main(String[] args){
 
         int factorialNum  = 10;
